@@ -1,8 +1,74 @@
-solid hello
-	facet normal 0 0 0
+solid test_cube
+	facet normal -0.0 -0.0 1.0
 	outer loop
 		vertex 0, 0, 0
-		vertex 0, 10, 0
-		vertex 10, 10, 10
+		vertex 0, 1, 0
+		vertex 1, 0, 0
 	endloop
-endsolid hello
+	facet normal 0.0 1.0 0.0
+	outer loop
+		vertex 0, 0, 0
+		vertex 0, 0, 1
+		vertex 1, 0, 0
+	endloop
+	facet normal 1.0 -0.0 -0.0
+	outer loop
+		vertex 0, 0, 0
+		vertex 0, 0, 1
+		vertex 0, 1, 0
+	endloop
+	facet normal -0.0 1.0 -0.0
+	outer loop
+		vertex 1, 0, 1
+		vertex 0, 0, 1
+		vertex 1, 0, 0
+	endloop
+	facet normal 1.0 0.0 0.0
+	outer loop
+		vertex 0, 1, 1
+		vertex 0, 0, 1
+		vertex 0, 1, 0
+	endloop
+	facet normal -0.0 -0.0 1.0
+	outer loop
+		vertex 1, 1, 0
+		vertex 1, 0, 0
+		vertex 0, 1, 0
+	endloop
+	facet normal 1.0 -0.0 -0.0
+	outer loop
+		vertex 1, 0, 0
+		vertex 1, 0, 1
+		vertex 1, 1, 0
+	endloop
+	facet normal 1.0 -0.0 -0.0
+	outer loop
+		vertex 1, 1, 1
+		vertex 1, 1, 0
+		vertex 1, 0, 1
+	endloop
+	facet normal -0.0 1.0 -0.0
+	outer loop
+		vertex 0, 1, 0
+		vertex 1, 1, 0
+		vertex 0, 1, 1
+	endloop
+	facet normal -0.0 1.0 -0.0
+	outer loop
+		vertex 1, 1, 1
+		vertex 0, 1, 1
+		vertex 1, 1, 0
+	endloop
+	facet normal -0.0 -0.0 1.0
+	outer loop
+		vertex 1, 1, 1
+		vertex 1, 0, 1
+		vertex 0, 1, 1
+	endloop
+	facet normal -0.0 -0.0 1.0
+	outer loop
+		vertex 0, 0, 1
+		vertex 0, 1, 1
+		vertex 1, 0, 1
+	endloop
+endsolid test_cube

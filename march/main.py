@@ -1,4 +1,4 @@
-
+import numpy as np
 class point():
     x = 0
     y = 0
@@ -12,6 +12,9 @@ class point():
 
     def __str__(self) -> str:
         return f"{self.x}, {self.y}, {self.z}"
+    
+    def to_np_array(self):
+        return np.array([self.x, self.y, self.z])
 
 class triangle():
     a: point
@@ -20,15 +23,37 @@ class triangle():
     def __init__(self, points: tuple) -> None:
         if len(points) != 3 :
             raise Exception("triangles requires exactly 3 sides")
-        self.a = points[0]
-        self.b = points[1]
-        self.c = points[2]
+        self.a: point = points[0]
+        self.b: point = points[1]
+        self.c: point = points[2]
+    
+        x = np.array([
+            [self.a.x, self.a.y, self.a.z],
+            [self.b.x, self.b.y, self.b.z],
+            [self.c.x, self.c.y, self.c.z]
+        ])
+        if np.linalg.det(x) < 0: # if 0 might be bad??
+            temp: point = self.b
+            self.b = self.c
+            self.c = temp
+
+        norm = point(self.compute_normal()).to_np_array()
+
+        # if the dot product is positive it is clockwise
+        # the order should be counter-clockwise, though
+        # since its viewed from 0,0,0 inside the model
+        # all orderings should be made to be clockwise
+        if norm.dot(self.a.to_np_array()) < 0:
+            temp: point = self.b
+            self.b = self.c
+            self.c = temp
 
     def compute_normal(self) -> tuple:
-        Nx = (self.a.y * self.b.z) - (self.a.z * self.b.y)
-        Ny = (self.a.z * self.b.x) - (self.a.x * self.b.z)
-        Nz = (self.a.x * self.b.y) - (self.a.y * self.b.x)
-        return (Nx,Ny,Nz)
+        N = np.cross(
+            self.b.to_np_array() - self.a.to_np_array(),
+            self.c.to_np_array() - self.a.to_np_array()
+        )
+        return N / N.sum()
 
 class solid():
     triangles: list[triangle] = []
@@ -49,13 +74,68 @@ class solid():
             f.write(f"endsolid {solidname}\n")
 
 
-
+# this is gross
 my_obj: solid = solid([
     triangle((
         point((0,0,0)),
-        point((0,10,0)),
-        point((10,10,10))
-    ))
+        point((0,1,0)),
+        point((1,0,0))
+    )),
+    triangle((
+        point((0,0,0)),
+        point((0,0,1)),
+        point((1,0,0))
+    )),
+    triangle((
+        point((0,0,0)),
+        point((0,0,1)),
+        point((0,1,0))
+    )),
+    triangle((
+        point((1,0,1)),
+        point((0,0,1)),
+        point((1,0,0))
+    )),
+    triangle((
+        point((0,1,1)),
+        point((0,0,1)),
+        point((0,1,0))
+    )),
+    triangle((
+        point((1,1,0)),
+        point((1,0,0)),
+        point((0,1,0))
+    )),
+    triangle((
+        point((1,0,0)),
+        point((1,0,1)),
+        point((1,1,0))
+    )),
+    triangle((
+        point((1,1,1)),
+        point((1,0,1)),
+        point((1,1,0))
+    )),
+    triangle((
+        point((0,1,0)),
+        point((1,1,0)),
+        point((0,1,1))
+    )),
+    triangle((
+        point((1,1,1)),
+        point((1,1,0)),
+        point((0,1,1))
+    )),
+    triangle((
+        point((1,1,1)),
+        point((1,0,1)),
+        point((0,1,1))
+    )),
+    triangle((
+        point((0,0,1)),
+        point((1,0,1)),
+        point((0,1,1))
+    )),
     ])
 
-my_obj.save_ascii(solidname="hello", filename="./my_obj.stl")
+my_obj.save_ascii(solidname="test_cube", filename="./my_obj_no_det.stl")
